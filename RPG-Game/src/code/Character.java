@@ -20,7 +20,6 @@ public class Character {
 		inventory = new ArrayList<Item>();
 		System.out.println("Test");
 	}
-	//stuff
 	
 	/**
 	 * Damages the Character by the given amount and returns true if the
@@ -28,9 +27,9 @@ public class Character {
 	 * @param damage the HP to be removed from the character
 	 * @return true if the character died
 	 */
-	public boolean doDamage(int damage) {
-		//TODO
-		return false;
+	public boolean takeDamage(int damage) {
+		HP = HP - damage;
+		return isDead();
 	}
 	
 	/**
@@ -120,6 +119,14 @@ public class Character {
 	public void clearInventory() {
 		inventory = new ArrayList<Item>();
 	}
+	/**
+	 * Kills Character or not... 
+	 * The choice is not yours screw you con
+	 * @return kills Character or not.
+	 */
+	public boolean isDead(){
+		if (HP <= 0) {return true;}
+		else {return false;}
+	}
 }
 
-//Laptop test!
