@@ -10,6 +10,7 @@ package code;
 public class Tester {
 	public static void main(String[] args) {
 		int damage = 9001;
+		int increased = 5;
 		//it's OVER 9000!!!!!!!!!!!
 		Character marcus = new Character("Marcus", 10000);
 		marcus.takeDamage(damage);
@@ -19,6 +20,9 @@ public class Tester {
 		}
 		else{System.out.println("U no deed");}
 		marcus.heal(3);
+		System.out.println(marcus.getHP());
+		marcus.raiseMaxHP(increased);
+		marcus.heal(2000000);
 		System.out.println(marcus.getHP());
 		}
 }

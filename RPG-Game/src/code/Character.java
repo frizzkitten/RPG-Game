@@ -37,7 +37,6 @@ public class Character {
 	 * @param healed increases the Characters HP by this amount
 	 */
 	public void heal(int healed) {
-		//TODO implement and make sure health doesn't go above maxHP
 		if((HP < maxHP) & (!isDead())){
 		for (int i = 0; ((HP < maxHP) && (i < healed)); i++){ HP++;}
 		}
@@ -48,7 +47,7 @@ public class Character {
 	 * @param increased max health increases by this amount
 	 */
 	public void raiseMaxHP(int increased) {
-		//TODO
+		maxHP = maxHP + increased;
 	}
 
 	/**
