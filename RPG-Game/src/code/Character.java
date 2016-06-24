@@ -38,6 +38,9 @@ public class Character {
 	 */
 	public void heal(int healed) {
 		//TODO implement and make sure health doesn't go above maxHP
+		if((HP < maxHP) & (!isDead())){
+		for (int i = 0; ((HP < maxHP) && (i < healed)); i++){ HP++;}
+		}
 	}
 	
 	/**
