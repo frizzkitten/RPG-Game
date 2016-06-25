@@ -1,10 +1,12 @@
 package code;
 
 public class Weapon extends Item {
-
-	public Weapon(String Name) {
+	private int wepDamage;
+	public Weapon(String Name, int damage) {
 		super(Name);
+		this.wepDamage = damage;
 	}
-	
+	public int getWepDamage(){
+		return wepDamage;
+	}
 }
-//AAAAAGGGGGGHHHHHHHH!!!!!!
