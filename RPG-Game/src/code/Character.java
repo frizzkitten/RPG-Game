@@ -18,7 +18,6 @@ public class Character {
 		this.setMaxHP(MaxHP);
 		this.setHP(MaxHP);
 		inventory = new ArrayList<Item>();
-		System.out.println("Test");
 	}
 	
 	/**
@@ -28,7 +27,7 @@ public class Character {
 	 * @return true if the character died
 	 */
 	public boolean takeDamage(int damage) {
-		HP = HP - damage;
+		HP -= damage;
 		return isDead();
 	}
 	
@@ -37,8 +36,11 @@ public class Character {
 	 * @param healed increases the Characters HP by this amount
 	 */
 	public void heal(int healed) {
-		if((HP < maxHP) & (!isDead())){
-		for (int i = 0; ((HP < maxHP) && (i < healed)); i++){ HP++;}
+		if (!isDead()) {
+			HP += healed;
+			if (HP > maxHP) {
+				HP = maxHP;
+			}
 		}
 	}
 	
