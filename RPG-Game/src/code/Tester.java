@@ -24,7 +24,7 @@ public class Tester {
 		marcus.raiseMaxHP(increased);
 		marcus.heal(2000000);
 		System.out.println(marcus.getHP());
-		Weapon haladen = new Weapon("haladen", 5);
+		Weapon haladen = new Weapon("haladen", 50, 50, 5);
 		marcus.takeDamage(haladen.getWepDamage());
 		System.out.println(marcus.getHP());
 		}
