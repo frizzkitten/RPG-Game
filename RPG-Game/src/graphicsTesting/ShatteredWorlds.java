@@ -28,7 +28,7 @@ public class ShatteredWorlds {
 		
 		sprite = new Sprite(a);
 		sprite.setXVelocity(0.01f);
-		sprite.setYVelocity(0.01f);
+		sprite.setYVelocity(0.03f);
 	}
 	
 	//main engine to run
@@ -73,25 +73,13 @@ public class ShatteredWorlds {
 	public void update(long timePassed) {
 		if (sprite.getX() <= 0) {
 			sprite.setXVelocity(Math.abs(sprite.getXVelocity()));
-//			if (sprite.getXVelocity() < 0) {
-//				sprite.setXVelocity(0);
-//			}
 		} else if (sprite.getX() + sprite.getWidth() >= screen.getWidth()) {
 			sprite.setXVelocity(-Math.abs(sprite.getXVelocity()));
-//			if (sprite.getXVelocity() > 0) {
-//				sprite.setXVelocity(0);
-//			}
 		}
 		if (sprite.getY() <= 0) {
 			sprite.setYVelocity(Math.abs(sprite.getYVelocity()));
-//			if (sprite.getYVelocity() < 0) {
-//				sprite.setYVelocity(0);
-//			}
 		} else if (sprite.getY() + sprite.getHeight() >= screen.getHeight()) {
 			sprite.setYVelocity(-Math.abs(sprite.getYVelocity()));
-//			if (sprite.getYVelocity() > 0) {
-//				sprite.setYVelocity(0);
-//			}
 		}
 		
 		sprite.update(timePassed);
