@@ -2,6 +2,11 @@ package com.game.src.main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -13,8 +18,15 @@ public class Game extends Canvas implements Runnable {
 	public static final int SCALE = 2;
 	public final String TITLE = "Shattered World";
 	
+	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage spriteSheet = null;
+	
 	private boolean running = false;
 	private Thread thread;
+	
+	//TEMPORARY
+	private Player p;
+	//END TEMPORARY
 	
 	private synchronized void start() {
 		if (running) { return; }
@@ -40,13 +52,70 @@ public class Game extends Canvas implements Runnable {
 		
 	}
 	
+	private void init() {
+		//makes it so you don't have to click the screen before playing
+		requestFocus();
+		
+		BufferedImageLoader loader = new BufferedImageLoader();
+		try {
+			spriteSheet = loader.loadImage("/SpriteSheet.png");
+		} 
+		//would most likely happen if the file doesn't exist
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//so that the game will listen to keyboard input
+		addKeyListener(new KeyInput(this));
+		
+		//creates the main character, should really be 16, 16, 200, 200, this
+		//but the spritesheet has too many pixels
+		p = new Player(220, 255, 200, 200, this);
+		
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		if (key == KeyEvent.VK_LEFT) {
+			p.setXVel(-3);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			p.setXVel(3);
+		} else if (key == KeyEvent.VK_UP) {
+			p.setYVel(-3);
+		} else if (key == KeyEvent.VK_DOWN) {
+			p.setYVel(3);
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		//TODO need to alter this so that if the opposite key is pressed,
+		//won't set to 0 (right now that causes some stuttery movement)
+		if (key == KeyEvent.VK_LEFT) {
+			p.setXVel(0);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			p.setXVel(0);
+		} else if (key == KeyEvent.VK_UP) {
+			p.setYVel(0);
+		} else if (key == KeyEvent.VK_DOWN) {
+			p.setYVel(0);
+		}
+	}
+	
 	public void run() {
 		
+		init();
+		
 		long lastTime = System.nanoTime();
+		//number of times the tick method will run per second
 		final double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
+		//the number of times tick() has run in the current second
 		int updates = 0;
+		//the number of frames drawn in the current second
 		int frames = 0;
 		long timer = System.currentTimeMillis();
 		
@@ -55,12 +124,15 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
+			//delta will be >= 1 amountOfTicks times per second
 			if (delta >= 1) {
 				tick();
 				updates++;
 				delta--;
 			}
+			//draws everything to the screen
 			render();
+			//for fps
 			frames++;
 			
 			if (System.currentTimeMillis() - timer > 1000) {
@@ -72,15 +144,34 @@ public class Game extends Canvas implements Runnable {
 			
 		}
 		
+		//ends game
 		stop();
 		
 	}
 	
 	private void tick() {
-		
+		p.tick();
 	}
 	
 	private void render () {
+		BufferStrategy bs = this.getBufferStrategy();
+		
+		if (bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+		
+		Graphics g = bs.getDrawGraphics();
+		//area for actually drawing stuff
+		/////////////////////////////////
+		
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		
+		p.render(g);
+		
+		/////////////////////////////////
+		g.dispose();
+		bs.show();
 		
 	}
 	
@@ -97,10 +188,15 @@ public class Game extends Canvas implements Runnable {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		//I think this puts the frame in the middle of the screen
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		game.start();
+	}
+	
+	public BufferedImage getSpriteSheet() {
+		return spriteSheet;
 	}
 	
 }
