@@ -2,6 +2,10 @@ package com.game.src.main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -13,8 +17,15 @@ public class Game extends Canvas implements Runnable {
 	public static final int SCALE = 2;
 	public final String TITLE = "Shattered World";
 	
+	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage spriteSheet = null;
+	
 	private boolean running = false;
 	private Thread thread;
+	
+	//TEMPORARY
+	private Player p;
+	//END TEMPORARY
 	
 	private synchronized void start() {
 		if (running) { return; }
@@ -40,7 +51,21 @@ public class Game extends Canvas implements Runnable {
 		
 	}
 	
+	private void init() {
+		BufferedImageLoader loader = new BufferedImageLoader();
+		try {
+			spriteSheet = loader.loadImage("/SpriteSheet.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		p = new Player(200, 200, this);
+		
+	}
+	
 	public void run() {
+		
+		init();
 		
 		long lastTime = System.nanoTime();
 		final double amountOfTicks = 60.0;
@@ -77,10 +102,28 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
-		
+		p.tick();
 	}
 	
 	private void render () {
+		BufferStrategy bs = this.getBufferStrategy();
+		
+		if (bs == null) {
+			createBufferStrategy(3);
+			return;
+		}
+		
+		Graphics g = bs.getDrawGraphics();
+		//area for actually drawing stuff
+		/////////////////////////////////
+		
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		
+		p.render(g);
+		
+		/////////////////////////////////
+		g.dispose();
+		bs.show();
 		
 	}
 	
@@ -101,6 +144,10 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		
 		game.start();
+	}
+	
+	public BufferedImage getSpriteSheet() {
+		return spriteSheet;
 	}
 	
 }
