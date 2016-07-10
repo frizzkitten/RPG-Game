@@ -3,6 +3,7 @@ package com.game.src.main;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -59,8 +60,38 @@ public class Game extends Canvas implements Runnable {
 			e.printStackTrace();
 		}
 		
+		addKeyListener(new KeyInput(this));
+		
 		p = new Player(200, 200, this);
 		
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		if (key == KeyEvent.VK_LEFT) {
+			p.setXVel(-1);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			p.setXVel(1);
+		} else if (key == KeyEvent.VK_UP) {
+			p.setYVel(-1);
+		} else if (key == KeyEvent.VK_DOWN) {
+			p.setYVel(1);
+		}
+	}
+	
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		if (key == KeyEvent.VK_LEFT) {
+			p.setXVel(0);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			p.setXVel(0);
+		} else if (key == KeyEvent.VK_UP) {
+			p.setYVel(0);
+		} else if (key == KeyEvent.VK_DOWN) {
+			p.setYVel(0);
+		}
 	}
 	
 	public void run() {

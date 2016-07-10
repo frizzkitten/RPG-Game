@@ -8,23 +8,29 @@ public class Player {
 	private double x;
 	private double y;
 	
-	private BufferedImage player;
+	private double xVel;
+	private double yVel;
+	
+	private BufferedImage playerImg;
 	
 	public Player(double x, double y, Game game) {
 		this.x = x;
 		this.y = y;
+		this.xVel = 0;
+		this.yVel = 0;
 		
 		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
 		
-		player = ss.grabImage(1, 1, 210, 255);
+		playerImg = ss.grabImage(1, 1, 210, 255);
 	}
 	
 	public void tick() {
-		x--;
+		x += xVel;
+		y += yVel;
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(player, (int) x, (int) y, null);
+		g.drawImage(playerImg, (int) x, (int) y, null);
 	}
 	
 	public void setX(double x) {
@@ -41,6 +47,22 @@ public class Player {
 	
 	public double getY() {
 		return y;
+	}
+	
+	public void setXVel(double xVel) {
+		this.xVel = xVel;
+	}
+	
+	public void setYVel(double yVel) {
+		this.yVel = yVel;
+	}
+	
+	public double getXVel() {
+		return xVel;
+	}
+	
+	public double getYVel() {
+		return yVel;
 	}
 	
 }
