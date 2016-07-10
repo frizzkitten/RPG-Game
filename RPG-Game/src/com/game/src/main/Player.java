@@ -7,13 +7,16 @@ public class Player {
 
 	private double x;
 	private double y;
-	
 	private double xVel;
 	private double yVel;
+	private int width;
+	private int height;
 	
 	private BufferedImage playerImg;
 	
-	public Player(double x, double y, Game game) {
+	public Player(int width, int height, double x, double y, Game game) {
+		this.width = width;
+		this.height = height;
 		this.x = x;
 		this.y = y;
 		this.xVel = 0;
@@ -27,6 +30,23 @@ public class Player {
 	public void tick() {
 		x += xVel;
 		y += yVel;
+		
+		//collision with edges
+		//left edge
+		if (x < 0) 
+			x = 0;
+		//top edge
+		if (y < 0) 
+			y = 0;
+		//this one is a bit off for some reason
+		//right edge
+		if (x > Game.WIDTH * Game.SCALE - width) 
+			x = Game.WIDTH * Game.SCALE - width;
+		//but this one seems fine
+		//bottom edge
+		if (y > Game.HEIGHT * Game.SCALE - height) 
+			y = Game.HEIGHT * Game.SCALE - height;
+		
 	}
 	
 	public void render(Graphics g) {

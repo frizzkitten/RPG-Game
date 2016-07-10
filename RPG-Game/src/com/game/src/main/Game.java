@@ -53,16 +53,24 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void init() {
+		//makes it so you don't have to click the screen before playing
+		requestFocus();
+		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try {
 			spriteSheet = loader.loadImage("/SpriteSheet.png");
-		} catch (IOException e) {
+		} 
+		//would most likely happen if the file doesn't exist
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		//so that the game will listen to keyboard input
 		addKeyListener(new KeyInput(this));
 		
-		p = new Player(200, 200, this);
+		//creates the main character, should really be 16, 16, 200, 200, this
+		//but the spritesheet has too many pixels
+		p = new Player(220, 255, 200, 200, this);
 		
 	}
 	
@@ -70,19 +78,21 @@ public class Game extends Canvas implements Runnable {
 		int key = e.getKeyCode();
 		
 		if (key == KeyEvent.VK_LEFT) {
-			p.setXVel(-1);
+			p.setXVel(-3);
 		} else if (key == KeyEvent.VK_RIGHT) {
-			p.setXVel(1);
+			p.setXVel(3);
 		} else if (key == KeyEvent.VK_UP) {
-			p.setYVel(-1);
+			p.setYVel(-3);
 		} else if (key == KeyEvent.VK_DOWN) {
-			p.setYVel(1);
+			p.setYVel(3);
 		}
 	}
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 		
+		//TODO need to alter this so that if the opposite key is pressed,
+		//won't set to 0 (right now that causes some stuttery movement)
 		if (key == KeyEvent.VK_LEFT) {
 			p.setXVel(0);
 		} else if (key == KeyEvent.VK_RIGHT) {
@@ -99,10 +109,13 @@ public class Game extends Canvas implements Runnable {
 		init();
 		
 		long lastTime = System.nanoTime();
+		//number of times the tick method will run per second
 		final double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
+		//the number of times tick() has run in the current second
 		int updates = 0;
+		//the number of frames drawn in the current second
 		int frames = 0;
 		long timer = System.currentTimeMillis();
 		
@@ -111,12 +124,15 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
+			//delta will be >= 1 amountOfTicks times per second
 			if (delta >= 1) {
 				tick();
 				updates++;
 				delta--;
 			}
+			//draws everything to the screen
 			render();
+			//for fps
 			frames++;
 			
 			if (System.currentTimeMillis() - timer > 1000) {
@@ -128,6 +144,7 @@ public class Game extends Canvas implements Runnable {
 			
 		}
 		
+		//ends game
 		stop();
 		
 	}
@@ -171,6 +188,7 @@ public class Game extends Canvas implements Runnable {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		//I think this puts the frame in the middle of the screen
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
