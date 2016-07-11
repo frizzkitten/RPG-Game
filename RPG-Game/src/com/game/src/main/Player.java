@@ -15,6 +15,12 @@ public class Player {
 	private SpriteSheet spriteSheet;
 	
 	private BufferedImage playerImg;
+	//could be made into an animation if we want an idle animation
+	private BufferedImage idle;
+	private Animation walkRight;
+	private Animation walkLeft;
+	private Animation walkUp;
+	private Animation walkDown;
 	
 	public Player(String location, int width, int height, double x, double y, Game game) {
 		
@@ -24,6 +30,10 @@ public class Player {
 		this.y = y;
 		this.xVel = 0;
 		this.yVel = 0;
+		this.walkRight = new Animation();
+		this.walkLeft = new Animation();
+		this.walkUp = new Animation();
+		this.walkDown = new Animation();
 		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try {
@@ -34,7 +44,14 @@ public class Player {
 			e.printStackTrace();
 		}
 		
-		playerImg = spriteSheet.grabImage(1, 1, 210, 255);
+		idle = spriteSheet.grabImage(1, 1, 210, 255);
+		playerImg = idle;
+		
+		//add animations
+		walkRight.makeWalkAnimation(spriteSheet, "right");
+		walkLeft.makeWalkAnimation(spriteSheet, "left");
+		walkUp.makeWalkAnimation(spriteSheet, "up");
+		walkDown.makeWalkAnimation(spriteSheet, "down");
 	}
 	
 	public void tick() {
@@ -57,10 +74,46 @@ public class Player {
 		if (y > Game.HEIGHT * Game.SCALE - height) 
 			y = Game.HEIGHT * Game.SCALE - height;
 		
+		//animations
+		if (xVel > 0) {
+			playerImg = walkRight.update();
+		} else if (xVel < 0) {
+			playerImg = walkLeft.update();
+		} else if (yVel > 0) {
+			playerImg = walkDown.update();
+		} else if (yVel < 0) {
+			playerImg = walkUp.update();
+		}
+		//standing still animation
+		else {
+			playerImg = idle;
+		}
+		
 	}
 	
 	public void render(Graphics g) {
 		g.drawImage(playerImg, (int) x, (int) y, null);
+	}
+	
+	//assumes all frames in a walking animation will be the same length
+	public void addToWalkRight(int time, String... locations) {
+		for (String location : locations)
+			walkRight.addScene(location, time);
+	}
+
+	public void addToWalkLeft(int time, String... locations) {
+		for (String location : locations)
+			walkLeft.addScene(location, time);
+	}
+	
+	public void addToWalkUp(int time, String... locations) {
+		for (String location : locations)
+			walkUp.addScene(location, time);
+	}
+	
+	public void addToWalkDown(int time, String... locations) {
+		for (String location : locations)
+			walkDown.addScene(location, time);
 	}
 	
 	public void setX(double x) {
