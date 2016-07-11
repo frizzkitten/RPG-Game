@@ -2,6 +2,7 @@ package com.game.src.main;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Player {
 
@@ -11,10 +12,12 @@ public class Player {
 	private double yVel;
 	private int width;
 	private int height;
+	private SpriteSheet spriteSheet;
 	
 	private BufferedImage playerImg;
 	
-	public Player(int width, int height, double x, double y, Game game) {
+	public Player(String location, int width, int height, double x, double y, Game game) {
+		
 		this.width = width;
 		this.height = height;
 		this.x = x;
@@ -22,9 +25,16 @@ public class Player {
 		this.xVel = 0;
 		this.yVel = 0;
 		
-		SpriteSheet ss = new SpriteSheet(game.getSpriteSheet());
+		BufferedImageLoader loader = new BufferedImageLoader();
+		try {
+			spriteSheet = new SpriteSheet(loader.loadImage(location));
+		} 
+		//would most likely happen if the file doesn't exist
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		playerImg = ss.grabImage(1, 1, 210, 255);
+		playerImg = spriteSheet.grabImage(1, 1, 210, 255);
 	}
 	
 	public void tick() {
