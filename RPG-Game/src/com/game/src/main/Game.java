@@ -12,14 +12,21 @@ import javax.swing.JFrame;
 
 public class Game extends Canvas implements Runnable {
 
+	//no idea what this is for but here it is
 	private static final long serialVersionUID = 1L;
+	
 	public static final int WIDTH = 320;
 	public static final int HEIGHT = WIDTH * 9 / 12;
 	public static final int SCALE = 2;
 	public final String TITLE = "Shattered World";
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	private BufferedImage spriteSheet = null;
+	//does this in the tutorial but I changed it cuz I don't like that
+	//private BufferedImage spriteSheet = null;
+	
+	//temporary until we make the background move instead of the character
+	private BufferedImage background = null;
+	
 	
 	private boolean running = false;
 	private Thread thread;
@@ -58,7 +65,9 @@ public class Game extends Canvas implements Runnable {
 		
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try {
-			spriteSheet = loader.loadImage("/SpriteSheet.png");
+			background = loader.loadImage("/GrassTile1.png");
+			//does this in the tutorial but I don't like it so I changed it
+			//spriteSheet = loader.loadImage("/SpriteSheet.png");
 		} 
 		//would most likely happen if the file doesn't exist
 		catch (IOException e) {
@@ -70,7 +79,7 @@ public class Game extends Canvas implements Runnable {
 		
 		//creates the main character, should really be 16, 16, 200, 200, this
 		//but the spritesheet has too many pixels
-		p = new Player(220, 255, 200, 200, this);
+		p = new Player("/SpriteSheet.png", 220, 255, 200, 200, this);
 		
 	}
 	
@@ -165,7 +174,11 @@ public class Game extends Canvas implements Runnable {
 		//area for actually drawing stuff
 		/////////////////////////////////
 		
+		//screen
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		
+		//background
+		g.drawImage(background, 0, 0, null);
 		
 		p.render(g);
 		
@@ -195,8 +208,9 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 	
-	public BufferedImage getSpriteSheet() {
-		return spriteSheet;
-	}
+	//does this in the tutorial but I don't like it
+//	public BufferedImage getSpriteSheet() {
+//		return spriteSheet;
+//	}
 	
 }
