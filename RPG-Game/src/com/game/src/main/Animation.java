@@ -67,7 +67,7 @@ public class Animation {
 	private void addWalkingScenes(int row, SpriteSheet ss) {
 		for (int i = 0; i < 4; i++) {
 			//TODO should be 16x16 but the test sprite sheet is dimensioned incorrectly
-			scenes.add(new Scene(ss.grabImage(row, WALKING_ORDER[i], 210, 250), 200));
+			scenes.add(new Scene(ss.grabImage(row, WALKING_ORDER[i], 16, 16), 200));
 		}
 	}
 	

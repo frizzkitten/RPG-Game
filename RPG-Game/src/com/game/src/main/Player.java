@@ -14,6 +14,11 @@ public class Player {
 	private int height;
 	private SpriteSheet spriteSheet;
 	
+	private boolean goingRight;
+	private boolean goingLeft;
+	private boolean goingDown;
+	private boolean goingUp;
+	
 	private BufferedImage playerImg;
 	//could be made into an animation if we want an idle animation
 	private BufferedImage idle;
@@ -30,6 +35,12 @@ public class Player {
 		this.y = y;
 		this.xVel = 0;
 		this.yVel = 0;
+		
+		this.setGoingDown(false);
+		this.setGoingUp(false);
+		this.setGoingRight(false);
+		this.setGoingLeft(false);
+		
 		this.walkRight = new Animation();
 		this.walkLeft = new Animation();
 		this.walkUp = new Animation();
@@ -44,7 +55,7 @@ public class Player {
 			e.printStackTrace();
 		}
 		
-		idle = spriteSheet.grabImage(1, 1, 210, 255);
+		idle = BufferedImageLoader.scale(spriteSheet.grabImage(1, 1, 16, 16), BufferedImage.TYPE_INT_ARGB, 16, 16, 2.0, 2.0);
 		playerImg = idle;
 		
 		//add animations
@@ -91,29 +102,12 @@ public class Player {
 		
 	}
 	
+	/**
+	 * Draws the character, is called every time the game's render is called
+	 * @param g
+	 */
 	public void render(Graphics g) {
 		g.drawImage(playerImg, (int) x, (int) y, null);
-	}
-	
-	//assumes all frames in a walking animation will be the same length
-	public void addToWalkRight(int time, String... locations) {
-		for (String location : locations)
-			walkRight.addScene(location, time);
-	}
-
-	public void addToWalkLeft(int time, String... locations) {
-		for (String location : locations)
-			walkLeft.addScene(location, time);
-	}
-	
-	public void addToWalkUp(int time, String... locations) {
-		for (String location : locations)
-			walkUp.addScene(location, time);
-	}
-	
-	public void addToWalkDown(int time, String... locations) {
-		for (String location : locations)
-			walkDown.addScene(location, time);
 	}
 	
 	public void setX(double x) {
@@ -146,6 +140,38 @@ public class Player {
 	
 	public double getYVel() {
 		return yVel;
+	}
+
+	public boolean isGoingRight() {
+		return goingRight;
+	}
+
+	public void setGoingRight(boolean goingRight) {
+		this.goingRight = goingRight;
+	}
+
+	public boolean isGoingLeft() {
+		return goingLeft;
+	}
+
+	public void setGoingLeft(boolean goingLeft) {
+		this.goingLeft = goingLeft;
+	}
+
+	public boolean isGoingDown() {
+		return goingDown;
+	}
+
+	public void setGoingDown(boolean goingDown) {
+		this.goingDown = goingDown;
+	}
+
+	public boolean isGoingUp() {
+		return goingUp;
+	}
+
+	public void setGoingUp(boolean goingUp) {
+		this.goingUp = goingUp;
 	}
 	
 }

@@ -77,9 +77,8 @@ public class Game extends Canvas implements Runnable {
 		//so that the game will listen to keyboard input
 		addKeyListener(new KeyInput(this));
 		
-		//creates the main character, should really be 16, 16, 200, 200, this
-		//but the spritesheet has too many pixels
-		p = new Player("/SpriteSheet.png", 220, 255, 200, 200, this);
+		//creates the main character
+		p = new Player("/PurpleDude.png", 16, 16, 200, 200, this);
 		
 	}
 	
@@ -87,13 +86,13 @@ public class Game extends Canvas implements Runnable {
 		int key = e.getKeyCode();
 		
 		if (key == KeyEvent.VK_LEFT) {
-			p.setXVel(-3);
+			p.setXVel(-1);
 		} else if (key == KeyEvent.VK_RIGHT) {
-			p.setXVel(3);
+			p.setXVel(1);
 		} else if (key == KeyEvent.VK_UP) {
-			p.setYVel(-3);
+			p.setYVel(-1);
 		} else if (key == KeyEvent.VK_DOWN) {
-			p.setYVel(3);
+			p.setYVel(1);
 		}
 	}
 	
@@ -103,13 +102,29 @@ public class Game extends Canvas implements Runnable {
 		//TODO need to alter this so that if the opposite key is pressed,
 		//won't set to 0 (right now that causes some stuttery movement)
 		if (key == KeyEvent.VK_LEFT) {
-			p.setXVel(0);
+			p.setGoingLeft(false);
+			if (!p.isGoingRight())
+				p.setXVel(0);
+			else 
+				return;
 		} else if (key == KeyEvent.VK_RIGHT) {
-			p.setXVel(0);
+			p.setGoingRight(false);
+			if (!p.isGoingLeft())
+				p.setXVel(0);
+			else 
+				return;
 		} else if (key == KeyEvent.VK_UP) {
-			p.setYVel(0);
+			p.setGoingUp(false);
+			if (!p.isGoingDown())
+				p.setYVel(0);
+			else 
+				return;
 		} else if (key == KeyEvent.VK_DOWN) {
-			p.setYVel(0);
+			p.setGoingDown(false);
+			if (!p.isGoingUp())
+				p.setYVel(0);
+			else 
+				return;
 		}
 	}
 	
